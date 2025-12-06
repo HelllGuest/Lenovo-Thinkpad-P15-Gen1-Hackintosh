@@ -68,7 +68,7 @@ log show --predicate 'process == "kernel"' --last boot | grep "ACPI: SSDT"
 ```
 
 ### Check EC Access
-YogaSMC menu bar → About → should show "ECAccess: R/W"
+YogaSMCNC menu bar → About → should show "ECAccess: R/W"
 
 ### Check Backlight
 - Brightness slider should work

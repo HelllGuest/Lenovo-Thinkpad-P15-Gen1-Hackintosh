@@ -167,11 +167,12 @@ python GenSMBIOS.py
 ```
 
 ### YogaSMC Features
-After installing [YogaSMC App](https://github.com/zhen-zen/YogaSMC):
+After installing [YogaSMC](https://github.com/zhen-zen/YogaSMC/releases/latest):
 - Battery conservation mode (charge threshold)
 - Fan speed control
 - Keyboard backlight control
 - Fn key customization
+- PrtSc key mapping (maps to F13 for screenshot shortcuts)
 
 ### Disable Hibernation (Recommended)
 ```bash
@@ -218,7 +219,7 @@ sudo pmset -a autopoweroff 0
 
 ### Included (`Tools/`)
 - **battery-diagnostics.sh** - Battery health and status diagnostics
-- **screenshot-key-setup.sh** - Screenshot key configuration
+- **screenshot-key-setup.sh** - PrtSc key setup guide for screenshots
 
 ### External
 - [Hackintool](https://github.com/benbaker76/Hackintool) - Swiss army knife for Hackintosh

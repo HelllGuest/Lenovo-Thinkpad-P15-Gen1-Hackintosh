@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# ThinkPad P15 Gen1 - Screenshot Key Setup Script
-# Configures Fn+PrtSc or other keys for screenshots on macOS
+# ThinkPad P15 Gen1 - Screenshot Key Setup Guide
+# Configures PrtSc key for screenshots on macOS
 #
 
 echo "=== ThinkPad Screenshot Key Setup ==="
@@ -17,129 +17,74 @@ is_kext_loaded() {
     fi
 }
 
-# Check if YogaSMC is loaded (injected by OpenCore)
+# Check if YogaSMC is loaded (required for PrtSc key to work)
 if is_kext_loaded "yogasmc"; then
-    echo "✓ YogaSMC is loaded"
-    echo ""
-    echo "OPTION 1: Configure in YogaSMC (RECOMMENDED)"
-    echo "  1. Click YogaSMC icon in menu bar"
-    echo "  2. Open Preferences"
-    echo "  3. Go to 'Events' tab"
-    echo "  4. Find event 0x1312 (PrtSc key)"
-    echo "  5. Add action: Screenshot"
+    echo "✓ YogaSMC.kext is loaded"
     echo ""
 else
-    echo "✗ YogaSMC not loaded"
-    echo "  Install YogaSMC.kext for ThinkPad hotkey support"
+    echo "✗ YogaSMC.kext is NOT loaded"
+    echo ""
+    echo "ERROR: YogaSMC.kext is required for PrtSc key to work!"
+    echo "  - YogaSMC.kext maps PrtSc to F13 which macOS can recognize"
+    echo "  - Install YogaSMC.kext and YogaSMCNC.app from:"
+    echo "    https://github.com/zhen-zen/YogaSMC/releases/latest"
+    echo "  - Set YogaSMCNC.app to launch at login"
+    echo ""
+    exit 1
+fi
+
+# Check if YogaSMC notification center app is installed
+if [ -d "/Applications/YogaSMCNC.app" ] || [ -d "$HOME/Applications/YogaSMCNC.app" ]; then
+    echo "✓ YogaSMCNC.app is installed"
+    echo ""
+else
+    echo "⚠ YogaSMCNC.app not found in /Applications"
+    echo "  Install YogaSMCNC.app for full ThinkPad feature support"
+    echo "  Download: https://github.com/zhen-zen/YogaSMC/releases/latest"
     echo ""
 fi
 
-# Check if Karabiner-Elements is installed
-if [ -d "/Applications/Karabiner-Elements.app" ]; then
-    echo "✓ Karabiner-Elements installed"
-    echo ""
-    echo "OPTION 2: Use Karabiner-Elements"
-    echo "  1. Open Karabiner-Elements"
-    echo "  2. Go to 'Simple Modifications'"
-    echo "  3. Add mapping: print_screen → command+shift+4"
-    echo "  Or for selection screenshot:"
-    echo "  3. Add mapping: print_screen → command+shift+5"
-    echo ""
-else
-    echo "○ Karabiner-Elements not installed"
-    echo "  Optional: https://karabiner-elements.pqrs.org/"
-    echo ""
-fi
-
-echo "OPTION 3: Create Quick Action (No extra software)"
+echo "=== Setup Instructions ==="
 echo ""
-echo -n "Create a Quick Action for screenshots? [y/N] "
-read -r REPLY
+echo "STEP 1: Ensure YogaSMCNC is Running"
+echo "  - Launch YogaSMCNC.app (should appear in menu bar)"
+echo "  - Set it to launch at login in app preferences"
+echo "  - YogaSMC.kext maps PrtSc key to F13 for macOS"
 echo ""
-
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    WORKFLOW_DIR="$HOME/Library/Services"
-    WORKFLOW_PATH="$WORKFLOW_DIR/ThinkPad Screenshot.workflow"
-    
-    # Create directory if needed
-    mkdir -p "$WORKFLOW_PATH/Contents"
-    
-    # Create Info.plist
-    cat > "$WORKFLOW_PATH/Contents/Info.plist" << 'PLIST'
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>NSServices</key>
-    <array>
-        <dict>
-            <key>NSMenuItem</key>
-            <dict>
-                <key>default</key>
-                <string>ThinkPad Screenshot</string>
-            </dict>
-            <key>NSMessage</key>
-            <string>runWorkflowAsService</string>
-        </dict>
-    </array>
-</dict>
-</plist>
-PLIST
-
-    # Create workflow document
-    cat > "$WORKFLOW_PATH/Contents/document.wflow" << 'WORKFLOW'
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>actions</key>
-    <array>
-        <dict>
-            <key>action</key>
-            <dict>
-                <key>AMAccepts</key>
-                <dict>
-                    <key>Container</key>
-                    <string>List</string>
-                </dict>
-                <key>ActionClass</key>
-                <string>RunShellScriptAction</string>
-                <key>ActionParameters</key>
-                <dict>
-                    <key>COMMAND_STRING</key>
-                    <string>screencapture -i -U ~/Desktop/Screenshot-$(date +%Y%m%d-%H%M%S).png</string>
-                    <key>CheckedForUserDefaultShell</key>
-                    <true/>
-                    <key>inputMethod</key>
-                    <integer>0</integer>
-                    <key>shell</key>
-                    <string>/bin/bash</string>
-                </dict>
-            </dict>
-        </dict>
-    </array>
-</dict>
-</plist>
-WORKFLOW
-
-    echo "✓ Quick Action created: $WORKFLOW_PATH"
-    echo ""
-    echo "To assign a keyboard shortcut:"
-    echo "  1. System Settings → Keyboard → Keyboard Shortcuts"
-    echo "  2. Select 'Services' in sidebar"
-    echo "  3. Expand 'General' section"
-    echo "  4. Find 'ThinkPad Screenshot'"
-    echo "  5. Click 'none' and press your desired shortcut"
-    echo ""
-else
-    echo "Skipped Quick Action creation."
-    echo ""
-fi
-
+echo "STEP 2: Map PrtSc in System Settings"
+echo "  1. Open System Settings (or System Preferences)"
+echo "  2. Go to Keyboard"
+echo "  3. Click 'Keyboard Shortcuts...' button"
+echo "  4. Select 'Screenshots' from the sidebar"
+echo "  5. Click on 'Save picture of screen as a file'"
+echo "  6. Press Fn+PrtSc or PrtSc on your keyboard"
+echo "     (macOS will register it as F13)"
+echo "  7. The shortcut should now show as F13"
+echo ""
+echo "STEP 3: Test the Key"
+echo "  - Press Fn+PrtSc or PrtSc"
+echo "  - You should hear the camera shutter sound"
+echo "  - Screenshot will be saved to Desktop"
+echo ""
+echo "=== Alternative Screenshot Options ==="
+echo ""
+echo "You can also map PrtSc to other screenshot actions:"
+echo "  - 'Save picture of selected area as a file' (selection tool)"
+echo "  - 'Copy picture of screen to clipboard' (no file saved)"
+echo "  - 'Copy picture of selected area to clipboard'"
+echo ""
 echo "=== macOS Built-in Screenshot Shortcuts ==="
 echo "  ⌘+⇧+3  : Capture entire screen"
 echo "  ⌘+⇧+4  : Capture selection"
-echo "  ⌘+⇧+5  : Screenshot toolbar"
-echo "  ⌘+⇧+6  : Capture Touch Bar (if applicable)"
+echo "  ⌘+⇧+5  : Screenshot toolbar (recommended)"
+echo ""
+echo "=== Troubleshooting ==="
+echo ""
+echo "If PrtSc doesn't work:"
+echo "  1. Verify YogaSMC.kext is loaded: kextstat | grep -i yoga"
+echo "  2. Check YogaSMCNC.app is running (menu bar icon)"
+echo "  3. Restart YogaSMCNC.app"
+echo "  4. Try remapping the shortcut in System Settings"
+echo "  5. Check YogaSMCNC preferences → Events tab for PrtSc event"
 echo ""
 echo "=== Setup Complete ==="
