@@ -51,10 +51,7 @@ SSDTs are loaded in the following sequence in `config.plist`:
 
 No battery SSDT is currently used because:
 - AppleSmartBatteryManager reads directly from SMBus, bypassing ACPI
-- ACPI patches cannot fix the "Service Recommended" warning
 - Battery works perfectly with SMCBatteryManager
-
-See [BATTERY-WARNING-INFO.md](BATTERY-WARNING-INFO.md) for details.
 
 ### Thunderbolt
 

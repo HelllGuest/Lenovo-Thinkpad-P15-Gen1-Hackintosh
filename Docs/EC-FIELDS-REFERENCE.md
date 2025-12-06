@@ -130,14 +130,11 @@ External (_SB_.PCI0.LPCB.EC__.BATM, MutexObj)      // Battery Mutex
 
 **Battery SSDT patches are NOT currently used** in this system because:
 - AppleSmartBatteryManager reads directly from SMBus, bypassing ACPI
-- ACPI patches cannot fix the "Service Recommended" warning
 - Battery works perfectly without custom SSDT
-
-See [BATTERY-WARNING-INFO.md](BATTERY-WARNING-INFO.md) for complete explanation.
 
 ## Historical Context
 
-This guide documents the EC field verification process that was performed during battery patch development. While battery SSDTs were created and tested, they ultimately could not solve the "Service Recommended" warning because macOS reads battery data directly from the battery's EEPROM chip via SMBus, completely bypassing ACPI methods.
+This guide documents the EC field verification process that was performed during battery patch development. While battery SSDTs were created and tested, macOS reads battery data directly from the battery's EEPROM chip via SMBus, completely bypassing ACPI methods.
 
 The verified EC fields documented here remain accurate and could be useful for:
 - Future battery-related development
@@ -158,7 +155,7 @@ The correct implementation would require:
 - Mutex protection (BATM)
 - Unit conversion (mAh vs mWh)
 
-However, these cannot override SMBus reads, so they don't fix the warning.
+However, these cannot override SMBus reads.
 
 ---
 

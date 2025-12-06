@@ -13,14 +13,14 @@ Decompiled and documented ACPI SSDT patches for ThinkPad P15 Gen1 Hackintosh.
 | SSDT-DGPU.dsl | Disable NVIDIA discrete GPU | Yes |
 | SSDT-HKEY.dsl | ThinkPad hotkey methods for YogaSMC | Yes |
 | SSDT-INIT.dsl | System initialization variables | Yes |
-| SSDT-PNLF.dsl | Backlight control for WhateverGreen | Yes |
-| SSDT-ALS0.dsl | Ambient Light Sensor (fake) | Optional |
+| SSDT-PNLF.dsl | Backlight control | Yes |
+| SSDT-ALS0.dsl | Fake ambient light sensor | Optional |
 | SSDT-MCHC.dsl | Memory Controller Hub device | Yes |
 | SSDT-USBX.dsl | USB power properties | Yes |
 | SSDT-SBUS.dsl | SMBus device support | Yes |
 | SSDT-RHUB.dsl | USB Root Hub reset for USBMap | Yes |
-| SSDT-TBOLT.dsl | Thunderbolt 3 (Intel Titan Ridge JHL7540) | Optional |
-| SSDT-TBOLT-HOTPLUG.dsl | Thunderbolt 3 with hot-plug (alternate) | Optional |
+| SSDT-TBOLT.dsl | Thunderbolt 3 (Intel Titan Ridge) | Optional |
+| SSDT-TBOLT-HOTPLUG.dsl | Thunderbolt 3 with hot-plug (alternate, not currently used) | Optional |
 
 ## Compiling
 
@@ -82,11 +82,12 @@ These SSDTs require corresponding ACPI renames in config.plist:
 
 | Patch | Find | Replace | For | Required |
 |-------|------|---------|-----|----------|
-| _OSI to XOSI | `_OSI` | `XOSI` | SSDT-XOSI | Yes |
 | EC _STA to XSTA | `_STA` (in EC scope) | `XSTA` | SSDT-EC | Yes |
-| PNLF to XNLF | `PNLF` | `XNLF` | SSDT-PNLF | Only if PNLF exists in DSDT |
+| NBCF Zero to One | `NBCF, 0` | `NBCF, 1` | EC initialization | Yes |
+| PNLF to XNLF | `PNLF` | `XNLF` | SSDT-PNLF | Yes |
+| _OSI to XOSI | `_OSI` | `XOSI` | SSDT-XOSI | Yes |
 
-**Note**: The PNLF rename is only needed if your DSDT already contains a PNLF device. Check your DSDT first before applying this patch.
+**Note**: All four patches are currently enabled in config.plist. The PNLF rename disables the existing PNLF device in DSDT so SSDT-PNLF can create a new one. NBCF patch sets EC initialization flag.
 
 ## Verification
 
@@ -96,7 +97,7 @@ After compiling and installing SSDTs, verify they loaded correctly:
 # Check loaded ACPI tables
 log show --predicate 'process == "kernel"' --last boot | grep "ACPI: SSDT"
 
-# Should show all 14 SSDTs loaded in order
+# Should show 14 SSDTs loaded in order (TBOLT-HOTPLUG is an alternate, not used)
 ```
 
 

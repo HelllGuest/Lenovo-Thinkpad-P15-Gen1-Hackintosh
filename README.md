@@ -59,8 +59,6 @@ macOS Sonoma 14.8.2 on Lenovo ThinkPad P15 Gen1
 
 ## Known Issues
 
-⚠️ **Battery "Service Recommended"**: Cosmetic warning due to battery EEPROM reporting incorrect design capacity. Battery works perfectly, warning is harmless. See [Docs/BATTERY-WARNING-INFO.md](Docs/BATTERY-WARNING-INFO.md) for details.
-
 ## Repository Structure
 
 ```
@@ -106,12 +104,10 @@ macOS Sonoma 14.8.2 on Lenovo ThinkPad P15 Gen1
 ## Kexts
 
 ### Essential (Load First)
-| Kext | Version | Purpose |
-|------|---------|---------|
-| Lilu | 1.7.2 | Patching engine |
-| VirtualSMC | 1.3.8 | SMC emulation |
-| WhateverGreen | 1.7.1 | Graphics patching |
-| AppleALC | 1.9.7 | Audio codec support |
+- **Lilu** - Patching engine
+- **VirtualSMC** - SMC emulation
+- **WhateverGreen** - Graphics patching
+- **AppleALC** - Audio codec support
 
 ### SMC Plugins
 - **SMCBatteryManager** - Battery status reporting
@@ -120,28 +116,28 @@ macOS Sonoma 14.8.2 on Lenovo ThinkPad P15 Gen1
 - **SMCLightSensor** - Ambient light sensor
 
 ### Input
-- **VoodooPS2Controller** (2.3.8) - Keyboard, trackpad, TrackPoint
-- **BrightnessKeys** (1.0.4) - Brightness hotkeys
+- **VoodooPS2Controller** - Keyboard, trackpad, TrackPoint
+- **BrightnessKeys** - Brightness hotkeys
 
 ### Network
-- **IntelMausiEthernet** (2.5.4) - Intel I219-LM Ethernet
-- **AirportItlwm** (2.3.0) - Intel AX201 WiFi
-- **IntelBluetoothFirmware** (2.5.0) - Bluetooth firmware
-- **IntelBTPatcher** (2.5.0) - Bluetooth patches
-- **BlueToolFixup** (2.7.2) - Bluetooth compatibility
+- **IntelMausiEthernet** - Intel I219-LM Ethernet
+- **AirportItlwm** - Intel AX201 WiFi
+- **IntelBluetoothFirmware** - Bluetooth firmware
+- **IntelBTPatcher** - Bluetooth patches
+- **BlueToolFixup** - Bluetooth compatibility
 
 ### Storage & USB
-- **NVMeFix** (1.1.4) - NVMe power management
-- **USBToolBox** (1.2.0) - USB mapping companion
-- **USBMap** (1.1) - USB port map
-- **Sinetek-rtsx** (9.0.0) - Realtek SD card reader
+- **NVMeFix** - NVMe power management
+- **USBToolBox** - USB mapping companion
+- **USBMap** - USB port map
+- **Sinetek-rtsx** - Realtek SD card reader
 
 ### ThinkPad Specific
-- **YogaSMC** (1.5.3) - ThinkPad EC features, fan control
-- **ECEnabler** (1.0.6) - EC field access
+- **YogaSMC** - ThinkPad EC features, fan control
+- **ECEnabler** - EC field access
 
 ### Other
-- **RestrictEvents** (1.1.7) - System event patches
+- **RestrictEvents** - System event patches
 
 ## Installation
 
@@ -203,9 +199,7 @@ sudo pmset -a autopoweroff 0
 - Check kext is loaded: `kextstat | grep itlwm`
 - Try [HeliPort](https://github.com/OpenIntelWireless/HeliPort) for manual connection
 
-### Battery Issues
-- See [Docs/BATTERY-WARNING-INFO.md](Docs/BATTERY-WARNING-INFO.md)
-- "Service Recommended" warning is cosmetic only
+
 
 ### Sleep Issues
 - Disable hibernation (see above)
@@ -219,7 +213,6 @@ sudo pmset -a autopoweroff 0
 | [Source/README.md](Source/README.md) | SSDT source files guide |
 | [Docs/SSDT-LOADING-ORDER.md](Docs/SSDT-LOADING-ORDER.md) | ACPI loading sequence |
 | [Docs/EC-FIELDS-REFERENCE.md](Docs/EC-FIELDS-REFERENCE.md) | EC field mappings from DSDT |
-| [Docs/BATTERY-WARNING-INFO.md](Docs/BATTERY-WARNING-INFO.md) | Battery warning explanation |
 
 ## Tools
 
